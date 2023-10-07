@@ -39,6 +39,7 @@ router.get('/read', async (req, res) => {
     const totalPages = Math.ceil(totalBooks / perPage);
     
     const books = await BookDetails.find()
+    .sort({ _id: -1 })
       .skip((page - 1) * perPage)
       .limit(perPage);
 
@@ -161,7 +162,6 @@ router.get('/search', async (req, res) => {
       .skip(skip)
       .limit(ITEMS_PER_PAGE);
 
-    // Count the total number of matching books for pagination
     const totalBooks = await BookDetails.countDocuments({
       $or: [
         { title: { $regex: searchRegex } },
@@ -170,7 +170,6 @@ router.get('/search', async (req, res) => {
       ],
     });
 
-    // Calculate the total number of pages
     const totalPages = Math.ceil(totalBooks / ITEMS_PER_PAGE);
 
     res.status(200).json({ books, totalPages });
@@ -179,6 +178,32 @@ router.get('/search', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+
+router.get('/:bookId/ratings', async (req, res) => {
+  const { bookId } = req.params;
+
+  try {
+    const ratings = await Rating.find({ bookId });
+
+    if (!ratings || ratings.length === 0) {
+      return res.status(404).json({ averageRating: null });
+    }
+
+    const totalRatings = ratings.reduce((sum, rating) => sum + rating.rating, 0);
+    const averageRating = totalRatings / ratings.length;
+
+    res.status(200).json({ averageRating });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+
+
 
 
 module.exports = router;

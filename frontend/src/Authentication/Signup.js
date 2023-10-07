@@ -1,11 +1,22 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { handleEmail, handlePassword, handleConfirmPass} from './Validators/EmailAndPassword'
-import { signUpUser } from './Validators/BackendInterface'
-import {resetForm} from  './resetForm'
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { handleEmail, handlePassword, handleConfirmPass } from './Validators/EmailAndPassword';
+import { signUpUser } from './Validators/BackendInterface';
+import { resetForm } from './resetForm';
+import { IoBookOutline } from 'react-icons/io5';
+
+import './authentication.css'
 const Signup = () => {
 
-  //State for managing 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      navigate('/')
+    }
+  }, [navigate])
+
   const [name, setName] = useState('');
   const [company, setCompany] = useState('');
   const [email, setEmail] = useState('');
@@ -28,48 +39,48 @@ const Signup = () => {
     setSpanEmail(message);
   }
 
-  //Handle Password Validation
 
-function PasswordValid(password){
-  const message = handlePassword(password, setValidPass)
-  setSpanPass(message)
-}
+  function PasswordValid(password) {
+    const message = handlePassword(password, setValidPass)
+    setSpanPass(message)
+  }
 
-//Check Confirm password with normal Password
-function confirmPassValidation(confirmPass){
-  const message = handleConfirmPass(password,confirmPass,setIsConfirmPass);
-  setSpanCPass(message);
-}
+  function confirmPassValidation(confirmPass) {
+    const message = handleConfirmPass(password, confirmPass, setIsConfirmPass);
+    setSpanCPass(message);
+  }
 
-//Store the data to the database on Submit
-async function handleSubmit(event) {
-  event.preventDefault();
+  async function handleSubmit(event) {
+    event.preventDefault();
 
-  if (isValidEmail && isValidPass && isConfirmPass) {
-    try {
-      const userData = {
-        name,
-        company,
-        email,
-        password,
-      };
-      const response = await signUpUser(userData);
-      console.log('Signup successful:', response);
-      
-      resetForm(setName,setCompany,setEmail, setValidEmail,setValidPass,setIsConfirmPass,setSpanEmail,setSpanPass,setSpanCPass,setPassword,setConfirmPass);
+    if (isValidEmail && isValidPass && isConfirmPass) {
+      try {
+        const userData = {
+          name,
+          company,
+          email,
+          password,
+        };
+        const response = await signUpUser(userData);
+        console.log('Signup successful:', response);
 
-    
-    } catch (error) {
-      console.error('Error signing up:', error);
+        resetForm(setName, setCompany, setEmail, setValidEmail, setValidPass, setIsConfirmPass, setSpanEmail, setSpanPass, setSpanCPass, setPassword, setConfirmPass);
+
+
+      } catch (error) {
+        console.error('Error signing up:', error);
+      }
     }
   }
-}
 
 
   return (
-    <div className="section1">
+    <div className="section">
+      <div className="text-gray-900 font-medium text-lg flex items-center justify-center">
+        <IoBookOutline size={28} /> <span className='mx-2 font-semibold '>Book Store</span>
+      </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img className="LogoDesign" src='./Logo.png' alt="Book Management" />
+
         <h2 className="authHeading">Create Your Account </h2>
       </div>
 
@@ -84,7 +95,7 @@ async function handleSubmit(event) {
               </div>
             </div>
 
-         
+
 
           </div>
 
@@ -92,7 +103,7 @@ async function handleSubmit(event) {
           <div>
             <label htmlFor="email" className="inputTagline">Email address</label>
             <div className="mt-2">
-              <input id="email" name="email" onChange={(e) => {setEmail(e.target.value); handleEmailValidation(e.target.value)}} value={email} type="email" autoComplete="email" required className="inputField" />
+              <input id="email" name="email" onChange={(e) => { setEmail(e.target.value); handleEmailValidation(e.target.value) }} value={email} type="email" autoComplete="email" required className="inputField" />
             </div>
             {spanEmail && spanEmail}
 
@@ -103,9 +114,9 @@ async function handleSubmit(event) {
               <label htmlFor="password" className="inputTagline">Password</label>
             </div>
             <div className="mt-2">
-              <input id="password" name="password" type="password" onChange={(e) => {setPassword(e.target.value);PasswordValid(e.target.value)}} value={password} autoComplete="current-password" required className="inputField" />
+              <input id="password" name="password" type="password" onChange={(e) => { setPassword(e.target.value); PasswordValid(e.target.value) }} value={password} autoComplete="current-password" required className="inputField" />
             </div>
-            
+
             {spanPass && spanPass}
           </div>
 
@@ -114,7 +125,7 @@ async function handleSubmit(event) {
               <label htmlFor="confirmPass" className="inputTagline">Confirm Password</label>
             </div>
             <div className="mt-2">
-              <input id="confirmPass" name="confirmPass" type="password" onChange={(e) => {setConfirmPass(e.target.value);confirmPassValidation(e.target.value)}} value={confirmPass} autoComplete="current-password" required className="inputField" />
+              <input id="confirmPass" name="confirmPass" type="password" onChange={(e) => { setConfirmPass(e.target.value); confirmPassValidation(e.target.value) }} value={confirmPass} autoComplete="current-password" required className="inputField" />
             </div>
             {spanCPass && spanCPass}
           </div>

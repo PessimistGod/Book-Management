@@ -1,10 +1,12 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import './CreateBook.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const CreateBook = () => {
+  const navigate = useNavigate();
   const toastProperties = useMemo(() => ({
     position: "top-center",
     autoClose: 500,
@@ -25,6 +27,13 @@ const CreateBook = () => {
     publicationDate: '',
     imageUrl: '',
   });
+
+  useEffect(()=>{
+    const token = localStorage.getItem('token');
+    if(!token){
+      navigate('/login');
+    }
+  },[navigate])
 
   const handleChange = (e) => {
     const { name, value } = e.target;

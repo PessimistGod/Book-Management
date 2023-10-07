@@ -18,10 +18,10 @@ function App() {
           <Route path='/Cart' element={<Cart />}></Route>
           <Route path='/addBook' element={<CreateBook />}></Route>
           <Route path='/editBook/:id' element={<EditBook />}></Route>
-          <Route path="*" element={<InvalidPage />} ></Route>
           </Route>
           <Route path='/login' element={<Login />}></Route>
           <Route path='/signup' element={<Signup />}></Route>
+          <Route path="*" element={<InvalidPage />} ></Route>
 
           
    </Routes>

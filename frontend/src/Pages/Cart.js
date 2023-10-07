@@ -2,14 +2,17 @@ import React, { useState, useEffect, useMemo } from 'react';
 import jwtDecode from 'jwt-decode';
 import { fetchCartItems, updateCartItemQuantity, removeCartItem, recalculateTotalPrice } from './ApiHandlers';
 import { BiPlus, BiMinus } from 'react-icons/bi'
-import {IoBagCheckOutline} from 'react-icons/io5'
+import {IoBagCheckOutline, IoBag} from 'react-icons/io5'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
-import { useCart } from '../ContextProvider/CartContext'; 
+import { useCart } from '../ContextProvider/CartContext';
+import { useNavigate } from 'react-router-dom';
+
 
 const Cart = () => {
   const { fetchCartItemCount } = useCart();
+  const navigate = useNavigate();
 
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -31,6 +34,9 @@ const Cart = () => {
     const fetchUserCartItems = async () => {
       try {
         const token = localStorage.getItem('token');
+        if(!token){
+          navigate('/login')
+        }
         const decodeToken = jwtDecode(token);
         SetUid(decodeToken.id);
 
@@ -45,7 +51,7 @@ const Cart = () => {
     };
 
     fetchUserCartItems();
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     const total = recalculateTotalPrice(cartItems);
@@ -127,7 +133,10 @@ const Cart = () => {
       />
       <h1 className="text-2xl font-semibold text-center my-6">Shopping Cart</h1>
       {cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
+        <div className='flexCenter flex-col h-[60vh]'>
+          <div className=''><IoBag size={200}/></div>
+          <div>No Items in Your Cart</div>
+        </div>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full table-auto border-collapse border rounded-lg">

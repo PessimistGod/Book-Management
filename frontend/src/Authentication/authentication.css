@@ -1,0 +1,24 @@
+.inputField{
+    padding: 15px;
+    margin-bottom: 15px;
+    width: 100%;    
+    border: 1px solid #ccc; 
+    border-radius: 5px;
+    font-size: 16px;
+    transition: transform 0.2s ease-in-out;
+}
+.inputField:focus{
+    outline: none; 
+    border-color: #0f1112; 
+    transform: scale(1.05);
+}
+.section{
+    max-width: 500px;
+    margin: 7em auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    transition: transform 0.3s ease-in-out;
+}

@@ -1,14 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BiEditAlt, BiSolidBookAdd } from 'react-icons/bi';
 import { MdDelete } from 'react-icons/md';
 import { useCart } from '../ContextProvider/CartContext';
 import BookDetailsCard from './BookDetailsCard';
+import Rating from 'react-rating-stars-component';
 
 const BookCard = ({ book, handleAddToCart, handleDeleteBook, handleRatingSubmit }) => {
   const navigate = useNavigate();
   const { userId } = useCart();
   const [isBookDetailsOpen, setIsBookDetailsOpen] = useState(false);
+  const [averageRating, setAverageRating] = useState(0); // Initialize with 0
+
+  useEffect(() => {
+    const fetchAverageRating = async () => {
+      if (book._id) {
+        try {
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/api/booksList/${book._id}/ratings`);
+          if (response.ok) {
+            const ratingsData = await response.json();
+            if (!isNaN(parseFloat(ratingsData.averageRating))) {
+              setAverageRating(parseFloat(ratingsData.averageRating).toFixed(0));
+            } else {
+              setAverageRating(0);
+            }
+          } else if (response.status === 404) {
+            setAverageRating(0);
+          } else {
+            throw new Error('Error fetching data');
+          }
+          console.clear()
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+  
+    fetchAverageRating();
+  }, [book._id, isBookDetailsOpen]);
+  
 
   const handleSelectBook = () => {
     setIsBookDetailsOpen(true);
@@ -40,8 +70,17 @@ const BookCard = ({ book, handleAddToCart, handleDeleteBook, handleRatingSubmit 
           <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
             {book.authors}
           </h3>
-          <h2 className="text-gray-900 title-font text-md font-normal">{book.title}</h2>
-          <p className="text-gray-400 text-[0.65rem] text-justify">{book.description.slice(0, 100)}{book.description && '...'}</p>
+          <h2 className="text-gray-900 title-font ite text-md font-normal">{book.title}</h2>
+          <div className="text-gray-400 text-[0.65rem] flex items-center"> 
+            <Rating
+              count={5}
+              size={24}
+              value={averageRating}
+              edit={false}
+              key={averageRating}
+            />
+            <span className='mx-1 text-xs border border-gray-300 p-1 px-2 rounded-full'>{averageRating}</span>
+          </div>
           <div className="flex justify-between items-center my-1">
             <p className="mt-1">₹{book.price}</p>
             <button onClick={(e) => handleAddToCart(e, book._id, userId)} className="px-4 py-1 bg-gray-800 hover:bg-black text-white border rounded-2xl whitespace-nowrap">

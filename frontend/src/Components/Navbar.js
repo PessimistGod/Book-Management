@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../ContextProvider/CartContext';
-import { IoMdCart } from 'react-icons/io';
-
+import { IoMdCart,  } from 'react-icons/io';
+import { IoBookOutline, IoLogOutOutline } from 'react-icons/io5'
 const Navbar = () => {
   const navigate = useNavigate();
   const { cartCount } = useCart();
@@ -23,17 +23,21 @@ const Navbar = () => {
   return (
     <header className="bg-white shadow-lg fixed w-full z-[60] top-0">
       <div className="container mx-auto flex items-center justify-between p-2">
-        <Link to="/" className="text-gray-900 font-medium text-lg">
-          <img className="w-24" src="./Logo.png" alt="Book Store" />
+        <Link to="/" className="text-gray-900 font-medium text-lg flex items-center justify-center">
+        <IoBookOutline size={28}/> <span className='mx-2 font-semibold '>Book Store</span>
         </Link>
 
         <div className="hidden md:flex flex-grow space-x-4 justify-center">
-          <Link to="/" className="hover:text-gray-900">
+          <div className='border border-gray-400 p-1 px-4 rounded-full'>
+
+          <Link to="/" className="hover:text-gray-900 mx-1 px-4">
             Home
           </Link>
-          <Link to="/addBook" className="hover:text-gray-900">
+          <span className=' border-r-2 border-gray-300'></span>
+          <Link to="/addBook" className="hover:text-gray-900 mx-1 px-4">
             Add Book
           </Link>
+          </div>
         </div>
 
         <div className="hidden md:flex items-center space-x-4 relative">
@@ -48,9 +52,9 @@ const Navbar = () => {
           </Link>
           <button
             onClick={handleLogout}
-            className="hidden md:block text-gray-600 focus:outline-none"
+            className="hidden md:flex text-gray-600 focus:outline-none"
           >
-            Logout
+            Logout<IoLogOutOutline size={26}/>
           </button>
         </div>
 
@@ -113,9 +117,9 @@ const Navbar = () => {
           </Link>
             <button
               onClick={handleLogout}
-              className="text-gray-900 font-medium hover:text-gray-600"
+              className="text-gray-900 font-medium hover:text-gray-600 flex"
             >
-              Logout
+              Logout<IoLogOutOutline size={26}/>
             </button>
           </div>
         </div>

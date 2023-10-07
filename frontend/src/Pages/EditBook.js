@@ -18,6 +18,10 @@ const EditBook = () => {
   });
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if(!token){
+      navigate('/login');
+    }
     async function fetchBookDetails() {
       try {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/booksList/edit/${id}`);

@@ -21,6 +21,7 @@ const BooksPage = () => {
   const [selectedBook, setSelectedBook] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  
 
   const toastProperties = useMemo(() => ({
     position: 'top-center',
@@ -118,6 +119,7 @@ const BooksPage = () => {
     }
   };
 
+
   return (
     <section className="text-gray-600 body-font">
       <ToastContainer
@@ -136,7 +138,9 @@ const BooksPage = () => {
 
       <div>
         {selectedBook && (
-          <BookDetailsCard book={selectedBook} closeDetail={() => setSelectedBook(null)} addToCart={(e) => handleAddToCart(e, selectedBook._id)} handleRatingSubmit={handleRatingSubmit} />
+          <BookDetailsCard book={selectedBook} closeDetail={() => setSelectedBook(null)} addToCart={(e) => handleAddToCart(e, selectedBook._id)} userId={userId}
+          onRatingSubmit={handleRatingSubmit} toast={toast} toastProperties={toastProperties}
+          />
         )}
       </div>
 
