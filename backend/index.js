@@ -11,14 +11,7 @@ const app = express();
 
 connectDB();
 
-const corsOptions = {
-    origin: allowedOrigin,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', 
-    credentials: true, 
-  };
-  
-  app.use(cors(corsOptions));
-
+app.use(cors());
 app.use(express.json());
 
 app.get('/' ,(req,res)=>{
