@@ -1,7 +1,7 @@
 
 .create-book-container {
     max-width: 500px;
-    margin: 35px auto;
+    margin: 7em auto;
     padding: 20px;
     background-color: #fff;
     border: 1px solid #ccc;
@@ -35,8 +35,9 @@
   }
   
   .create-book-input {
-    padding: 10px;
+    padding: 15px;
     margin-bottom: 15px;
+    
     border: 1px solid #ccc; 
     border-radius: 5px;
     font-size: 16px;

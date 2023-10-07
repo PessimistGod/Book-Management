@@ -2,7 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 const BookDetails = require('../Models/Books');
+const Rating = require('../Models/Rating');
+const Cart = require('../Models/Cart');
 
+const ITEMS_PER_PAGE = 10;
 
 router.post('/create', async (req, res) =>  {
     try {
@@ -29,31 +32,43 @@ router.post('/create', async (req, res) =>  {
 
 
 router.get('/read', async (req, res) => {
-try {
-  const details = await BookDetails.find();
-  res.status(200).json(details);
-} catch (error) {
-  console.error(error);
-  res.status(500).json({ error: error.message });
-}
+  try {
+    const perPage = parseInt(req.query.perPage) || ITEMS_PER_PAGE; // Default to 10 books per page
+    const page = parseInt(req.query.page) || 1; // Default to page 1
+    const totalBooks = await BookDetails.countDocuments();
+    const totalPages = Math.ceil(totalBooks / perPage);
+    
+    const books = await BookDetails.find()
+      .skip((page - 1) * perPage)
+      .limit(perPage);
+
+    res.status(200).json({
+      currentPage: page,
+      totalPages,
+      books,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
 });
 
 
 router.put('/update/:id', async (req, res) => {
-try {
-  const { id } = req.params;
-  const updatedData = req.body;
-  const updatedDetails = await BookDetails.findByIdAndUpdate(id, updatedData, { new: true });
-
-  if (!updatedDetails) {
-    return res.status(404).json({ error: 'Details not found' });
+  try {
+    const updatedBook = await BookDetails.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true } 
+    );
+    if (!updatedBook) {
+      return res.status(404).json({ message: 'Book not found' });
+    }
+    res.json(updatedBook);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
   }
-
-  res.status(200).json({ success: 'Updated Successfully' });
-} catch (error) {
-  console.error(error);
-  res.status(500).json({ error: error.message });
-}
 });
 
 
@@ -62,7 +77,10 @@ router.delete('/delete/:id', async (req, res) => {
 try {
 const { id } = req.params;
 
+await Cart.deleteMany({ bookId: id });
+await Rating.deleteMany({ bookId: id });
 const deletedDetails = await BookDetails.findByIdAndRemove(id);
+
 
 if (!deletedDetails) {
   return res.status(404).json({ error: 'Book not found' });
@@ -74,5 +92,93 @@ console.error(error);
 res.status(500).json({ error: error.message });
 }
 });
+
+
+router.get('/edit/:id', async (req, res) => {
+  try {
+    const book = await BookDetails.findById(req.params.id);
+    if (!book) {
+      return res.status(404).json({ message: 'Book not found' });
+    }
+    res.json(book);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+router.post('/:id/rate', async (req, res) => {
+  try {
+    const bookId = req.params.id;
+    const { userId, rating } = req.body;
+
+    const book = await BookDetails.findById(bookId);
+
+    if (!book) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+
+    const existingRating = await Rating.findOne({ userId, bookId });
+
+    if (existingRating) {
+      existingRating.rating = rating;
+      await existingRating.save();
+    } else {
+      const newRating = new Rating({ userId, bookId, rating });
+      await newRating.save();
+      book.ratings.push(newRating);
+    }
+
+    await book.save();
+
+    res.json({ message: 'Rating added/updated successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get('/search', async (req, res) => {
+  try {
+    const { query, page } = req.query;
+
+    if (!query) {
+      return res.status(400).json({ error: 'Search query is required' });
+    }
+
+    const searchRegex = new RegExp(query, 'i');
+
+    const skip = (page - 1) * ITEMS_PER_PAGE;
+
+    // Find books that match the search query with pagination
+    const books = await BookDetails.find({
+      $or: [
+        { title: { $regex: searchRegex } },
+        { authors: { $regex: searchRegex } },
+        { genre: { $regex: searchRegex } },
+      ],
+    })
+      .skip(skip)
+      .limit(ITEMS_PER_PAGE);
+
+    // Count the total number of matching books for pagination
+    const totalBooks = await BookDetails.countDocuments({
+      $or: [
+        { title: { $regex: searchRegex } },
+        { authors: { $regex: searchRegex } },
+        { genre: { $regex: searchRegex } },
+      ],
+    });
+
+    // Calculate the total number of pages
+    const totalPages = Math.ceil(totalBooks / ITEMS_PER_PAGE);
+
+    res.status(200).json({ books, totalPages });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 module.exports = router;

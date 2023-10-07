@@ -6,6 +6,8 @@ import Login from './Authentication/Login';
 import Signup from './Authentication/Signup';
 import Cart from './Pages/Cart';
 import CreateBook from './Pages/CreateBook';
+import EditBook from './Pages/EditBook';
+import InvalidPage from './InvalidPage';
 
 function App() {
   return (
@@ -15,8 +17,8 @@ function App() {
           <Route index element={<BooksPage />}></Route>
           <Route path='/Cart' element={<Cart />}></Route>
           <Route path='/addBook' element={<CreateBook />}></Route>
-
-
+          <Route path='/editBook/:id' element={<EditBook />}></Route>
+          <Route path="*" element={<InvalidPage />} ></Route>
           </Route>
           <Route path='/login' element={<Login />}></Route>
           <Route path='/signup' element={<Signup />}></Route>

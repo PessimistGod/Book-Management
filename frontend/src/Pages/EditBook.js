@@ -1,20 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './CreateBook.css';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const CreateBook = () => {
-  const toastProperties = useMemo(() => ({
-    position: "top-center",
-    autoClose: 500,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "light",
-  }), []);
+const EditBook = () => {
+    const { id } = useParams();
+    const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: '',
     authors: '',
@@ -23,8 +14,31 @@ const CreateBook = () => {
     description: '',
     language: '',
     publicationDate: '',
-    imageUrl: '',
+    imageUrl: '', 
   });
+
+  useEffect(() => {
+    async function fetchBookDetails() {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/booksList/edit/${id}`);
+        if (response) {
+            setFormData(response.data);
+        } else {
+              navigate('/');
+          }
+      } catch (error) {
+        console.error(error);
+        navigate('/');
+      }
+    }
+
+    if(id){
+
+        fetchBookDetails();
+    }else{
+        navigate('/')
+    }
+  }, [id, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,44 +52,19 @@ const CreateBook = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/booksList/create`,
-        formData
-      );
-      toast.success(response.data.success, toastProperties);
+      const response = await axios.put(`${process.env.REACT_APP_API_URL}/api/booksList/update/${id}`, formData);
+      if (response.data) { 
+        navigate('/');
+      }
 
-
-      setFormData({
-        title: '',
-        authors: '',
-        price: '',
-        genre: '',
-        description: '',
-        language: '',
-        publicationDate: '',
-        imageUrl: '',
-      });
     } catch (error) {
-      console.error('Error:', error);
+      console.error(error);
     }
   };
 
   return (
-    <div className="create-book-container p-3 ">
-      <ToastContainer
-        position="top-center"
-        autoClose={1000}
-        limit={1}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-      <h1 className="create-book-title">Add Book Details</h1>
+    <div className="create-book-container p-3">
+      <h1 className="create-book-title">Edit Book Details</h1>
       <form className="create-book-form bg-gray-50 p-4 border border-rounded rounded-2xl" onSubmit={handleSubmit}>
         <label className="create-book-label" htmlFor="imageUrl">
           Image URL:
@@ -90,16 +79,16 @@ const CreateBook = () => {
           required
         />
 
-        {formData.imageUrl && (
-          <div className='flex justify-end'>
+              {formData.imageUrl && (
+                <div className='flex justify-end'>
 
-            <img
-              src={formData.imageUrl}
-              alt="failed to Load"
-              className="w-14 h-14 rounded-full "
-            />
+        <img
+          src={formData.imageUrl}
+          alt="failed to Load"
+          className="w-14 h-14 rounded-full "
+          />
           </div>
-        )}
+      )}
 
         <label className="create-book-label" htmlFor="title">
           Title:
@@ -187,6 +176,8 @@ const CreateBook = () => {
           onChange={handleChange}
         ></textarea>
 
+
+
         <button className="create-book-button" type="submit">
           Submit
         </button>
@@ -197,4 +188,4 @@ const CreateBook = () => {
   );
 };
 
-export default CreateBook;
+export default EditBook;

@@ -37,7 +37,6 @@ const Cart = () => {
         const data = await fetchCartItems(decodeToken.id);
         setCartItems(data);
 
-        // Calculate the total price based on item quantity
         const total = recalculateTotalPrice(data);
         setTotalPrice(total);
       } catch (error) {
@@ -49,7 +48,6 @@ const Cart = () => {
   }, []);
 
   useEffect(() => {
-    // Recalculate the total price when cartItems change
     const total = recalculateTotalPrice(cartItems);
     setTotalPrice(total);
   }, [cartItems]);
@@ -113,7 +111,7 @@ const Cart = () => {
   };
 
   return (
-    <div className="container mx-auto mt-6 min-h-screen">
+    <div className="container mx-auto mt-16 min-h-screen ">
               <ToastContainer
         position="top-center"
         autoClose={1000}
@@ -127,7 +125,7 @@ const Cart = () => {
         pauseOnHover
         theme="light"
       />
-      <h1 className="text-2xl font-semibold mb-4">Shopping Cart</h1>
+      <h1 className="text-2xl font-semibold text-center my-6">Shopping Cart</h1>
       {cartItems.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (

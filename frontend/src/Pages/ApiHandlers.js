@@ -2,14 +2,20 @@ import axios from 'axios';
 
 import jwtDecode from 'jwt-decode';
 
-export async function readBooks(setBooks) {
+export async function readBooks(setBooks, setTotalPages, currentPage) {
   try {
-    const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/booksList/read`);
-    setBooks(response.data);
+    const perPage = 10; // Change this value to set the number of books per page
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/booksList/read?page=${currentPage}&perPage=${perPage}`
+    );
+    const responseData = response.data;
+    setBooks(responseData.books);
+    setTotalPages(responseData.totalPages);
   } catch (error) {
     console.error(error);
   }
 }
+
 
 export async function addToCart(userId, bookId) {
   try {
@@ -89,3 +95,23 @@ export const recalculateTotalPrice = (cartItems) => {
   });
   return total;
 };
+
+
+export async function searchBooks(setSearchResults, setTotalPages, searchQuery, currentPage) {
+  try {
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/booksList/search`, {
+      params: {
+        query: searchQuery,
+        page: currentPage,
+      },
+    });
+
+    if (response.status === 200) {
+      setSearchResults(response.data.books);
+      setTotalPages(response.data.totalPages); // Update the total pages
+      return { books: [], totalPages: 0 };
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
