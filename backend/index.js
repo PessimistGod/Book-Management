@@ -12,7 +12,7 @@ const app = express();
 connectDB();
 
 app.use(cors({
-    origin: ["https://book-management-phi.vercel.app"],
+    origin: "https://book-management-phi.vercel.app",
     methods: ["GET", "POST", "PUT" , "DELETE"],
     credentials: true,
 }));
