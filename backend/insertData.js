@@ -5,24 +5,26 @@ app.use(express.json());
 const fs = require('fs');
 const BookDetails = require('./Models/Books');
 
-mongoose.connect('mongodb://localhost:27017/Books', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-const jsonFilePath = './book_data.json';
-const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
-
-
-async function insertData() {
+async function main() {
   try {
+    // Connect to MongoDB before performing any database operations
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
+    const jsonFilePath = './book_data.json';
+    const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
+
     const result = await BookDetails.insertMany(jsonData);
     console.log(`Inserted ${result.length} documents into the collection.`);
   } catch (error) {
     console.error('Error inserting data:', error);
   } finally {
+    // Close the MongoDB connection when done
     mongoose.connection.close();
   }
 }
 
-insertData();
+// Call the main function to start the process
+main();

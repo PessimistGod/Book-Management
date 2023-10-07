@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(bodyParser.json({ limit: '1gb' }));
 
 app.use(cors({
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:3000", "https://book-management-phi.vercel.app"],
     methods: ["GET", "POST", "PUT" , "PATCH", "DELETE"],
     credentials: true,
 }))

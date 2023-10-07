@@ -3,19 +3,19 @@ const mongoose = require('mongoose');
 const BookSchema = new mongoose.Schema({
     title:{
         type:String,
-        required: true,
+        required: false,
     },
     authors:{
         type:String,
-        required: true,
+        required: false,
     },
     price:{
         type:String,
-        required: true,
+        required: false,
     },
     genre:{
         type: String,
-        required: true,
+        required: false,
     },
     description:{
         type:String,
@@ -31,7 +31,7 @@ const BookSchema = new mongoose.Schema({
     },
     imageUrl:{
         type:String,
-        required: true,
+        required: false,
     },
     ratings: [
         {
@@ -39,7 +39,7 @@ const BookSchema = new mongoose.Schema({
           ref: 'Rating',
         },
       ]
-},{timestamps:true});
+},{timestamps:false});
 
 mongoose.models = {}
 const BookDetails = mongoose.model('Book List', BookSchema)
