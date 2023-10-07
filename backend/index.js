@@ -5,20 +5,18 @@ const port = process.env.PORT || 6000;
 const BookDetails = require('./Routes/BooksApi');
 const authenticate = require('./Routes/AuthApi')
 const cors = require('cors')
-const bodyParser = require('body-parser');
 const cartItems = require('./Routes/CartRoutes')
 
 const app = express();
 
 connectDB();
-app.use(express.json());
-app.use(bodyParser.json({ limit: '1gb' }));
 
 app.use(cors({
-    origin: ["http://localhost:3000", "https://book-management-phi.vercel.app"],
+    origin: ["https://book-management-phi.vercel.app","http://localhost:3000"],
     methods: ["GET", "POST", "PUT" , "PATCH", "DELETE"],
     credentials: true,
-}))
+}));
+app.use(express.json());
 
 app.get('/' ,(req,res)=>{
     res.json("Books Api")
