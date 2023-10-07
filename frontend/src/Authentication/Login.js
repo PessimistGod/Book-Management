@@ -11,14 +11,19 @@ const Login = () => {
   const [password, setPassword] = useState('');
 
 
+
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token')
+    try{
 
-    if (token) {
-
-      navigate('/');
+      if (token) {
+        navigate('/')
+      }
+    }catch(e){
+      console.log(e)
+      localStorage.clear();
     }
-  }, [navigate]);
+  }, [navigate])
 
   const handleLogin = async (e) => {
     e.preventDefault();

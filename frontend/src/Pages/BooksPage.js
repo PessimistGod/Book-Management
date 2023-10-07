@@ -36,9 +36,15 @@ const BooksPage = () => {
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
-    if (!storedToken) {
-      navigate('/login');
-      return;
+    try{
+
+      if (!storedToken) {
+        navigate('/login');
+        return;
+      }
+    }catch(e){
+      console.log(e)
+      localStorage.clear()
     }
 
     const decodedToken = jwt_decode(storedToken);

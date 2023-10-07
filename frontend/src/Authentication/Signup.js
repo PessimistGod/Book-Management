@@ -12,8 +12,14 @@ const Signup = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token')
-    if (token) {
-      navigate('/')
+    try{
+
+      if (token) {
+        navigate('/')
+      }
+    }catch(e){
+      console.log(e)
+      localStorage.clear();
     }
   }, [navigate])
 
