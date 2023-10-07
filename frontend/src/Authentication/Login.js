@@ -15,7 +15,7 @@ const Login = () => {
 
       if (token) {
 
-        navigate('/Home'); 
+        navigate('/'); 
       }
     }, [navigate]);
 

@@ -69,7 +69,7 @@ async function handleSubmit(event) {
   return (
     <div className="section1">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img className="companyLogo" src='./Logo.png' alt="Book Management" />
+        <img className="LogoDesign" src='./Logo.png' alt="Book Management" />
         <h2 className="authHeading">Create Your Account </h2>
       </div>
 

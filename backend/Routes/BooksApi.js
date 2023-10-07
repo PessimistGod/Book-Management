@@ -9,7 +9,7 @@ router.post('/create', async (req, res) =>  {
         if (req.method === 'POST') {
             const details = new BookDetails(req.body);
                 
-            const requiredFields = [{ key: 'imageUrl', message: 'Image Url is required' }, { key: 'authors', message: 'Author field is required' }, { key: 'price', message: 'Price field is required' }];
+            const requiredFields = [{ key: 'title', message: 'Title is required' }, { key: 'authors', message: 'Author field is required' }, { key: 'price', message: 'Price field is required' },{key : 'genre', message:'Genre Field is required'}, { key: 'imageUrl', message: 'Image Url is required' }];
             for (const field of requiredFields) {
                 if (!details[field.key]) {
                     return res.status(400).json({ error: field.message });
