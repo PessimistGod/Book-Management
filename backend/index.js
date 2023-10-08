@@ -9,17 +9,17 @@ const cartItems = require('./Routes/CartRoutes')
 
 const app = express();
 
-connectDB();
 
 app.use(cors(
     {
-      origin: ["https://book-management-phi.vercel.app","http://localhost:3000"],
-      methods: ["POST", "GET", "PUT", "DELETE"],
-      credentials: true
+        origin: ["https://book-management-phi.vercel.app","http://localhost:3000"],
+        methods: ["POST", "GET", "PUT", "DELETE"],
+        credentials: true
     }
     ));
-
-app.use(express.json());
+    
+    app.use(express.json());
+    connectDB();
 
 app.get('/' ,(req,res)=>{
     res.json("Books Api")
