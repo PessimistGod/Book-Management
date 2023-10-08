@@ -46,4 +46,29 @@ The `python JSON extract` folder contains a Python script for fetching data from
 Modify the Python script to specify the ISBN numbers for which you want to fetch data.
 Run the Python script to generate or update the `book_data.json` file.
 
+## Snapshots
+
+#### SignUp page
+![Signup](Images/Signup.png)
+#### Login Page
+![Login](Images/Login.png)
+#### Loading Page
+![Loading](Images/Loading.png)
+#### Home Page
+![Home Page](Images/Home.png)
+#### Details View
+![Detail View](<Images/Detailed view.png>)
+#### Add View
+![Add Details](<Images/Add Details.png>)
+#### Pagination View
+![Pagination](Images/Pagination.png)
+#### Search 
+![Search](Images/Search.png)
+#### Cart
+![Cart](Images/Cart.png)
+#### Checkout
+![Checkout](Images/Checkout.png)
+#### Payment Success
+
+
 This project provides a seamless way to manage and organize your book collection, utilizing modern web technologies and a user-friendly interface. Feel free to explore and customize it according to your requirements.
