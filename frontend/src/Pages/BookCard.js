@@ -10,7 +10,7 @@ const BookCard = ({ book, handleAddToCart, handleDeleteBook, handleRatingSubmit 
   const navigate = useNavigate();
   const { userId } = useCart();
   const [isBookDetailsOpen, setIsBookDetailsOpen] = useState(false);
-  const [averageRating, setAverageRating] = useState(0); // Initialize with 0
+  const [averageRating, setAverageRating] = useState(0); 
 
   useEffect(() => {
     const fetchAverageRating = async () => {

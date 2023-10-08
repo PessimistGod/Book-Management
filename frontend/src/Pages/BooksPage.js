@@ -58,6 +58,7 @@ const BooksPage = () => {
   }, [currentPage, navigate, searchQuery]);
 
   const handlePageChange = (newPage) => {
+    window.scrollTo(0, 0);
     setCurrentPage(newPage);
   };
 
