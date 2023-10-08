@@ -1,14 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { handleEmail, handlePassword, handleConfirmPass } from './Validators/EmailAndPassword';
 import { signUpUser } from './Validators/BackendInterface';
 import { resetForm } from './resetForm';
 import { IoBookOutline } from 'react-icons/io5';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import './authentication.css'
 const Signup = () => {
 
   const navigate = useNavigate();
+
+  const toastProperties = useMemo(() => ({
+    position: "top-center",
+    autoClose: 500,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  }), []);
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -39,7 +52,7 @@ const Signup = () => {
   const [confirmPass, setConfirmPass] = useState('');
 
 
-  //Handle Email Validation
+
   async function handleEmailValidation(email) {
     const message = await handleEmail(email, setValidEmail);
     setSpanEmail(message);
@@ -68,13 +81,23 @@ const Signup = () => {
           password,
         };
         const response = await signUpUser(userData);
-        console.log('Signup successful:', response);
+        if(response){
+          setTimeout(() => {
+            
+            toast.success('Signup successful!', toastProperties);
+          }, 1000);
+          navigate('/login')
+        }else{
+        toast.error('Error signing up', toastProperties)
+
+        }
 
         resetForm(setName, setCompany, setEmail, setValidEmail, setValidPass, setIsConfirmPass, setSpanEmail, setSpanPass, setSpanCPass, setPassword, setConfirmPass);
 
 
       } catch (error) {
         console.error('Error signing up:', error);
+        toast.error('Error signing up', toastProperties)
       }
     }
   }
@@ -82,6 +105,19 @@ const Signup = () => {
 
   return (
     <div className="section">
+                  <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        limit={1}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="text-gray-900 font-medium text-lg flex items-center justify-center">
         <IoBookOutline size={28} /> <span className='mx-2 font-semibold '>Book Store</span>
       </div>
@@ -143,7 +179,7 @@ const Signup = () => {
 
         <p className="mt-10 text-center text-sm text-gray-500">
           Already a Member?
-          <Link to={'/Login'} className="SignFont">Sign in</Link>
+          <Link to={'/Login'} className="SignFont">Log in</Link>
         </p>
       </div>
     </div>

@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import './authentication.css'
 import { loginUser } from './Validators/BackendInterface';
 import { IoBookOutline } from 'react-icons/io5'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -10,6 +12,16 @@ const Login = () => {
 
   const [password, setPassword] = useState('');
 
+  const toastProperties = useMemo(() => ({
+    position: "top-center",
+    autoClose: 500,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  }), []);
 
 
   useEffect(() => {
@@ -33,32 +45,45 @@ const Login = () => {
         password,
       };
       const response = await loginUser(userData);
-      console.log('Signup successful:', response);
-
-      const token = response.token;
-
-
-      localStorage.setItem('token', token);
-
-      setEmail('')
-      setPassword('')
-
-      navigate('/');
-
-
-
+      if (response && response.token) {
+        setTimeout(() => {
+          
+          toast.success('Successfully Logged in', toastProperties);
+        }, 1000);
+        const token = response.token;
+        localStorage.setItem('token', token);
+        setEmail('');
+        setPassword('');
+        navigate('/');
+      } else {
+        toast.error('Invalid credentials. Please try again.', toastProperties);
+      }
     } catch (error) {
       console.error('Error during login:', error);
+      toast.error('Check if you have signed up.', toastProperties);
     }
   };
 
   return (
     <div className="section">
+            <ToastContainer
+        position="top-center"
+        autoClose={1000}
+        limit={1}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="text-gray-900 font-medium text-lg flex items-center justify-center">
         <IoBookOutline size={28} /> <span className='mx-2 font-semibold '>Book Store</span>
       </div>
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <h2 className="authHeading">Sign in to your account</h2>
+        <h2 className="authHeading">Log in to your account</h2>
       </div>
 
       <div className="formDiv">
@@ -81,7 +106,7 @@ const Login = () => {
           </div>
 
           <div>
-            <button type="submit" className="authBtn">Sign in</button>
+            <button type="submit" className="authBtn">Log in</button>
           </div>
         </form>
 
