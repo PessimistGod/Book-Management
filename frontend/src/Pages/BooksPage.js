@@ -154,7 +154,7 @@ const BooksPage = () => {
       <div className="container px-5 py-24 mx-auto">
         <SearchForm searchQuery={searchQuery} handleSearchInputChange={handleSearchInputChange} />
 
-        <div className="flex flex-wrap -m-4 justify-center">
+        <div className="flex flex-wrap  justify-center">
           {searchQuery === '' ? (
             books.map((book) => (
               <BookCard key={book._id} book={book} handleAddToCart={handleAddToCart} handleDeleteBook={handleDeleteBook} />

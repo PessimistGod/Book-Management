@@ -3,7 +3,7 @@ import {BiSearch} from 'react-icons/bi'
 
 const SearchForm = ({ searchQuery, handleSearchInputChange }) => {
   return (
-    <div className="flex justify-center items-center w-full">
+    <div className="flex justify-center items-center ">
       <form className="mb-4" onSubmit={(e) => e.preventDefault()}>
         <div className="relative w-96 flex"> {/* Adjust the width here, for example, 'w-96' for a wider search bar */}
           <input
