@@ -13,7 +13,7 @@ app.use(express.json());
 
 
 const corsOptions = {
-  origin: ["https://book-management-phi.vercel.app", "http://localhost:3000"],
+  origin: ["https://book-management-frontend-rosy.vercel.app", "http://localhost:3000"],
   methods: ["POST", "GET", "PUT", "DELETE"],
   credentials: true,
 };
