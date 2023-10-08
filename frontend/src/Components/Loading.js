@@ -3,7 +3,7 @@ import './Loading.css'
 
 const Loading = () => {
   return (
-    <div className='min-h-screen flexCenter flex-col'>
+    <div className='min-h-screen flexCenter flex-col shadow-lg'>
 
     <div className="book ">
 	<div className="book__pg-shadow"></div>
@@ -13,7 +13,7 @@ const Loading = () => {
 	<div className="book__pg book__pg--4"></div>
 	<div className="book__pg book__pg--5"></div>
 </div>
-<div>Loading...</div>
+<div className='font-bold text-black'>Loading...</div>
     </div>
   )
 }
