@@ -76,7 +76,7 @@ const BookDetailsCard = ({ book, closeDetail, addToCart, onRatingSubmit, toastPr
           <img
             src={book.imageUrl}
             alt={book.title}
-            className="mx-auto h-48 w-48 object-cover rounded-full"
+            className="mx-auto h-48 w-48 object-contain rounded-full"
           />
           <h2 className="text-2xl font-semibold text-gray-900 mt-4">{book.title}</h2>
           <p className="text-sm text-gray-600">{book.authors}</p>
