@@ -49,7 +49,7 @@ const Login = () => {
         setTimeout(() => {
           
           toast.success('Successfully Logged in', toastProperties);
-        }, 1000);
+        }, 1500);
         const token = response.token;
         localStorage.setItem('token', token);
         setEmail('');

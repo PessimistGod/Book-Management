@@ -85,7 +85,7 @@ const Signup = () => {
           setTimeout(() => {
             
             toast.success('Signup successful!', toastProperties);
-          }, 1000);
+          }, 1500);
           navigate('/login')
         }else{
         toast.error('Error signing up', toastProperties)
