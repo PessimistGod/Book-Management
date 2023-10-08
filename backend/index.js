@@ -10,6 +10,7 @@ const cartItems = require('./Routes/CartRoutes')
 const app = express();
 
 
+app.use(express.json());
 app.use(cors(
     {
         origin: ["https://book-management-phi.vercel.app","http://localhost:3000"],
@@ -17,8 +18,13 @@ app.use(cors(
         credentials: true
     }
     ));
-    
-    app.use(express.json());
+    const allowCrossDomain = function(req,res,next) {
+        res.header('Access-Control-Allow-Origin', 'https://book-management-phi.vercel.app');
+        res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
+        next();  
+      }
+
+      app.use(allowCrossDomain)
     connectDB();
 
 app.get('/' ,(req,res)=>{
