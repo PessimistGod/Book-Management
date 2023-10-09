@@ -10,6 +10,7 @@ import EditBook from './Pages/EditBook';
 import InvalidPage from './InvalidPage';
 import { useEffect, useState } from 'react';
 import Loading from './Components/Loading';
+import LoginLayout from './LoginLayout';
 
 function App() {
   return (
@@ -40,8 +41,12 @@ function AppContent() {
             <Route path="/addBook" element={<CreateBook />} />
             <Route path="/editBook/:id" element={<EditBook />} />
           </Route>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<LoginLayout />}>
+          <Route index element={<Login />} />
+          </Route>
+          <Route path="/signup" element={<LoginLayout />}>
+          <Route index element={<Signup/>} />
+          </Route>
           <Route path="*" element={<InvalidPage />} />
         </Routes>
       )}

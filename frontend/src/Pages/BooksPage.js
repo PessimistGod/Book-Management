@@ -9,6 +9,7 @@ import BookCard from './BookCard';
 import SearchForm from './SearchForm';
 import Pagination from './Pagination';
 import BookDetailsCard from './BookDetailsCard';
+import Loading from '../Components/Loading';
 
 const BooksPage = () => {
   const { fetchCartItemCount } = useCart();
@@ -21,7 +22,7 @@ const BooksPage = () => {
   const [selectedBook, setSelectedBook] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  
+  const [isLoading, SetIsLoading] = useState(true);
 
   const toastProperties = useMemo(() => ({
     position: 'top-center',
@@ -36,13 +37,13 @@ const BooksPage = () => {
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
-    try{
+    try {
 
       if (!storedToken) {
         navigate('/login');
         return;
       }
-    }catch(e){
+    } catch (e) {
       console.log(e)
       localStorage.clear()
     }
@@ -126,49 +127,60 @@ const BooksPage = () => {
     }
   };
 
+  useEffect(() => {
+    SetIsLoading(true)
+    setTimeout(() => {
+      SetIsLoading(false)
+    }, 1000);
+  }, [currentPage, navigate])
+
 
   return (
-    <section className="text-gray-600 body-font">
-      <ToastContainer
-        position="top-center"
-        autoClose={1000}
-        limit={1}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-
-      <div>
-        {selectedBook && (
-          <BookDetailsCard book={selectedBook} closeDetail={() => setSelectedBook(null)} addToCart={(e) => handleAddToCart(e, selectedBook._id)} userId={userId}
-          onRatingSubmit={handleRatingSubmit} toast={toast} toastProperties={toastProperties}
+    <>
+      {isLoading ? <Loading /> : (
+        <section className="text-gray-600 body-font">
+          <ToastContainer
+            position="top-center"
+            autoClose={1000}
+            limit={1}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
           />
-        )}
-      </div>
 
-      <div className="container px-5 py-24 mx-auto">
-        <SearchForm searchQuery={searchQuery} handleSearchInputChange={handleSearchInputChange} />
+          <div>
+            {selectedBook && (
+              <BookDetailsCard book={selectedBook} closeDetail={() => setSelectedBook(null)} addToCart={(e) => handleAddToCart(e, selectedBook._id)} userId={userId}
+                onRatingSubmit={handleRatingSubmit} toast={toast} toastProperties={toastProperties}
+              />
+            )}
+          </div>
 
-        <div className="flex flex-wrap  justify-center">
-          {searchQuery === '' ? (
-            books.map((book) => (
-              <BookCard key={book._id} book={book} handleAddToCart={handleAddToCart} handleDeleteBook={handleDeleteBook} />
-            ))
-          ) : (
-            searchResults.map((book) => (
-              <BookCard key={book._id} book={book} handleAddToCart={handleAddToCart} handleDeleteBook={handleDeleteBook} />
-            ))
-          )}
-        </div>
-      </div>
+          <div className="container px-5 py-24 mx-auto">
+            <SearchForm searchQuery={searchQuery} handleSearchInputChange={handleSearchInputChange} />
 
-      <Pagination totalPages={totalPages} currentPage={currentPage} handlePageChange={handlePageChange} />
-    </section>
+            <div className="flex flex-wrap  justify-center">
+              {searchQuery === '' ? (
+                books.map((book) => (
+                  <BookCard key={book._id} book={book} handleAddToCart={handleAddToCart} handleDeleteBook={handleDeleteBook} />
+                ))
+              ) : (
+                searchResults.map((book) => (
+                  <BookCard key={book._id} book={book} handleAddToCart={handleAddToCart} handleDeleteBook={handleDeleteBook} />
+                ))
+              )}
+            </div>
+          </div>
+
+          <Pagination totalPages={totalPages} currentPage={currentPage} handlePageChange={handlePageChange} />
+        </section>
+      )};
+    </>
   );
 };
 

@@ -112,7 +112,7 @@ const Login = () => {
 
         <p className="mt-10 text-center text-sm text-gray-500">
           Not a Member?
-          <Link to={'/Signup'} className="SignFont">Sign Up</Link>
+          <Link to={'/signup'} className="SignFont">Sign Up</Link>
         </p>
       </div>
     </div>
